@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Linking } from 'react-native';
-import { Camera } from 'expo-camera';
+import { CameraView, Camera } from 'expo-camera';
 
 const QRScanner = () => {
   const [hasPermission, setHasPermission] = useState(null);
@@ -10,7 +9,7 @@ const QRScanner = () => {
 
   useEffect(() => {
     const getCameraPermissions = async () => {
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     };
 
@@ -23,7 +22,7 @@ const QRScanner = () => {
 
     Alert.alert(
       'QR Code Scanned',
-      `Data: ${data}`,
+      `Type: ${type}\nData: ${data}`,
       [
         { text: 'Scan Again', onPress: () => setScanned(false) },
         { text: 'Copy', onPress: () => copyToClipboard(data) },
@@ -45,14 +44,15 @@ const QRScanner = () => {
   };
 
   const copyToClipboard = (text) => {
-// Note: You'll need to install @react-native-clipboard/clipboard for this// For now, we'll just show an alert
+    // Note: Install @react-native-clipboard/clipboard for actual clipboard functionality
+    // For now, we'll just show an alert
     Alert.alert('Copied', 'QR code data copied to clipboard');
   };
 
   if (hasPermission === null) {
     return (
       <View style={styles.container}>
-        <Text>Requesting camera permission...</Text>
+        <Text style={styles.text}>Requesting camera permission...</Text>
       </View>
     );
   }
@@ -62,7 +62,7 @@ const QRScanner = () => {
       <View style={styles.container}>
         <Text style={styles.text}>No access to camera</Text>
         <TouchableOpacity style={styles.button} onPress={() => {
-          Camera.requestPermissionsAsync().then(({ status }) => {
+          Camera.requestCameraPermissionsAsync().then(({ status }) => {
             setHasPermission(status === 'granted');
           });
         }}>
@@ -76,12 +76,33 @@ const QRScanner = () => {
     <View style={styles.container}>
       <Text style={styles.title}>Scan QR Code</Text>
       <View style={styles.cameraContainer}>
-        <BarCodeScanner
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+        <CameraView
           style={StyleSheet.absoluteFillObject}
+          facing="back"
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: [
+              "qr",
+              "pdf417",
+              "aztec", 
+              "ean13",
+              "ean8",
+              "upc_e",
+              "upc_a",
+              "code39",
+              "code93",
+              "code128",
+              "itf14",
+              "codabar",
+              "datamatrix"
+            ],
+          }}
         />
         <View style={styles.overlay}>
           <View style={styles.scanArea} />
+          <Text style={styles.scanText}>
+            {scanned ? 'Tap to scan again' : 'Point camera at QR code'}
+          </Text>
         </View>
       </View>
 
@@ -116,6 +137,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 10,
     overflow: 'hidden',
+    position: 'relative',
   },
   overlay: {
     position: 'absolute',
@@ -133,6 +155,16 @@ const styles = StyleSheet.create({
     borderColor: '#2196F3',
     borderRadius: 10,
     backgroundColor: 'transparent',
+  },
+  scanText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 20,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    padding: 10,
+    borderRadius: 5,
   },
   text: {
     fontSize: 18,

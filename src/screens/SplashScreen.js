@@ -41,7 +41,7 @@ const SplashScreen = () => {
                 key={i}
                 style={[
                   styles.qrSquare,
-                  (i === 0 || i === 2 || i === 4 || i === 6 || i === 8) && styles.qrSquareFilled,
+                  (i === 2 || i === 3 || i === 6 || i === 7) && styles.qrSquareFilled,
                 ]}
               />
             ))}
@@ -85,7 +85,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     flexWrap: 'wrap',
+    marginBottom: 60,
   },
   qrSquare: {
     width: 24,

@@ -7,6 +7,12 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "permissions": [
+      "CAMERA",
+      "MEDIA_LIBRARY",
+      "ACCESS_FINE_LOCATION",
+      "READ_CONTACTS"
+    ],
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",

@@ -77,6 +77,7 @@ const QRGenerator = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 50,
   },
   label: {
     fontSize: 16,
