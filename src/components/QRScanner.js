@@ -82,7 +82,7 @@ const QRScanner = () => {
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
           barcodeScannerSettings={{
             barcodeTypes: [
-              "qr",
+              "QR",
               "pdf417",
               "aztec", 
               "ean13",

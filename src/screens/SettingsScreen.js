@@ -505,6 +505,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    marginTop: 20,
     fontSize: 24,
     fontWeight: 'bold',
     color: 'white',
